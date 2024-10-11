@@ -29,51 +29,52 @@ const getRandomQuestion = (data) => {
     }
 }
 
-const handleAnswerOne = (randomQuestion) => {
-    if (randomQuestion.correct_answer === 'False') {
-        questionCount++;
-        startingPoint.innerHTML = `
-        <h2>Wrong Answer!</h2>
-        <button id="next-btn" class="btn">Next Question</button>
+const resetGame = () => {
+    questionCount = 0;
+    winCount = 0;
+
+    startingPoint.innerHTML = `
+        <h2>!?QUIZ?!</h2>
+        <button id="start-btn" class="btn">start</button>
         `;
-    } else {
-        questionCount++;
+
+    gameCount.innerHTML = `${winCount} / ${questionCount}`;
+    
+    const newStartBtn = document.getElementById('start-btn');
+    newStartBtn.addEventListener('click', startGame);        
+}
+
+const handleAnswer = (randomQuestion, userAnswer) => {
+    questionCount++;
+
+    if (randomQuestion.correct_answer === userAnswer) {
         winCount++;
         startingPoint.innerHTML = `
         <h2>Right Answer!</h2>
         <button id="next-btn" class="btn">Next Question</button>
         `;
-    }
-
-    gameCount.innerHTML = `
-    ${winCount} / ${questionCount}
-    `;
-    const nextBtn = document.getElementById('next-btn');
-    nextBtn.addEventListener('click', startGame);
-}
-
-const handleAnswerTwo = (randomQuestion) => {
-    if (randomQuestion.incorrect_answers[0] === 'False') {
-        questionCount++;
+    } else {
         startingPoint.innerHTML = `
         <h2>Wrong Answer!</h2>
         <button id="next-btn" class="btn">Next Question</button>
         `;
-    } else {
-        questionCount++;
-        winCount++;
-        startingPoint.innerHTML = `
-        <h2>Right Answer!</h2>
-        <button id="next-btn" class="btn">Next Question</button>
-        `;
     }
 
-    gameCount.innerHTML = `
-    ${winCount} / ${questionCount}
-    `;
+    gameCount.innerHTML = `${winCount} / ${questionCount}`;
+
     const nextBtn = document.getElementById('next-btn');
     nextBtn.addEventListener('click', startGame);
+
+    if (questionCount >= 6 || winCount >= 3) {
+        startingPoint.innerHTML = `
+        <h2>${winCount >= 3 ? 'You Win!' : 'You Loose!'}</h2>
+        <button id="reset-btn" class="btn">Reset the Game</button>
+        `;
+    }
+    const resetBtn = document.getElementById('reset-btn');
+    resetBtn.addEventListener('click', resetGame);
 }
+
 
 const startGame = async () => {
     const quizData = await fetchData();
@@ -87,14 +88,13 @@ const startGame = async () => {
     startingPoint.innerHTML = `
     <span id="category">${randomQuestion.category}</span>
     <h2>${randomQuestion.question}</h2>
-    <button id="answer-one" class="btn">${randomQuestion.correct_answer}</button>
-    <button id="answer-two" class="btn">${randomQuestion.incorrect_answers[0]}</button>
+    <button id="answer-true" class="btn">True</button>
+    <button id="answer-false" class="btn">False</button>
     `;
     }
-    document.getElementById('answer-one').addEventListener('click', () => handleAnswerOne(randomQuestion));
-    document.getElementById('answer-two').addEventListener('click', () => handleAnswerTwo(randomQuestion));
-
-   
+    
+    document.getElementById('answer-true').addEventListener('click', () => handleAnswer(randomQuestion, 'True'));
+    document.getElementById('answer-false').addEventListener('click', () => handleAnswer(randomQuestion, 'False'));
 }
 
 startBtn.addEventListener('click', startGame);
