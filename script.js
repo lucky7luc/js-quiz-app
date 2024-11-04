@@ -3,6 +3,7 @@ const startingPoint = document.getElementById('starting-point');
 //const quizUrl = 'https://opentdb.com/api.php?amount=14&category=9&difficulty=medium&type=boolean';
 const quizUrl = 'https://opentdb.com/api.php?amount=50&type=multiple';
 const gameCount = document.getElementById('count');
+const difficultyLevel = document.getElementById('difficulty-dropdown');
 let questionCount = 0;
 let winCount = 0;
 
@@ -11,22 +12,42 @@ const fetchData = async () => {
         const res = await fetch(quizUrl);
         const data = await res.json();
         return data;
+        //console.log(data);
     } catch (e) {
         console.error('Error fetchting the data: ', e);
         return null;
     }
 }
+//fetchData();
 
 const getRandomQuestion = (data) => {
-   if (data && data.results.length > 0) {
-    const randomIndex = Math.floor(Math.random() * data.results.length);
-    const randomQuestion = data.results[randomIndex];
-    return randomQuestion;
-    } else {
+    if (!data || data.results.length === 0) {
         console.error('No question available.');
         return null;
     }
+    
+    let filteredQuestions;
+    if (difficultyLevel.value === 'easy') {
+        filteredQuestions = data.results.filter(question => question.difficulty === 'easy');
+    } else if (difficultyLevel.value === 'medium') {
+        filteredQuestions = data.results.filter(question => question.difficulty === 'medium');
+    } else if (difficultyLevel.value === 'hard') {
+        filteredQuestions = data.results.filter(question => question.difficulty === 'hard');
+    } else {
+        // value: any
+        filteredQuestions = data.results;
+    }
+
+    if (filteredQuestions.length > 0) {
+        const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
+        const randomQuestion = filteredQuestions[randomIndex];
+        return randomQuestion;
+    } else {
+        console.error('No question available for selected difficulty.');
+        return null;
+    }
 }
+
 
 const shuffleAnswers = (answers) => {
     for (let i = answers.length - 1; i > 0; i--) {
@@ -59,12 +80,14 @@ const handleAnswer = (randomQuestion, userAnswer) => {
         startingPoint.innerHTML = `
         <span id="count">${winCount} / ${questionCount}</span>
         <h2>Right Answer!</h2>
+        <p>Your answer: <span class="bold">${randomQuestion.correct_answer}</span></p>
         <button id="next-btn" class="btn">Next Question</button>
         `;
     } else {
         startingPoint.innerHTML = `
         <span id="count">${winCount} / ${questionCount}</span>
         <h2>Wrong Answer!</h2>
+        <p>Correct answer: <span class="bold">${randomQuestion.correct_answer}</span></p>
         <button id="next-btn" class="btn">Next Question</button>
         `;
     }
@@ -77,6 +100,7 @@ const handleAnswer = (randomQuestion, userAnswer) => {
         startingPoint.innerHTML = `
         <span id="count">${winCount} / ${questionCount}</span>
         <h2>${winCount >= 3 ? 'You Win!' : 'You Loose!'}</h2>
+        <p>Correct answer: <span class="bold">${randomQuestion.correct_answer}</span></p>
         <button id="reset-btn" class="btn">Reset the Game</button>
         `;
     }
@@ -108,9 +132,9 @@ const startGame = async () => {
     }
     
     document.getElementById('answer-one').addEventListener('click', () => handleAnswer(randomQuestion, answers[0]));
-    document.getElementById('answer-two').addEventListener('click', () => handleAnswer(randomQuestion, answers[0]));
-    document.getElementById('answer-three').addEventListener('click', () => handleAnswer(randomQuestion, answers[0]));
-    document.getElementById('answer-four').addEventListener('click', () => handleAnswer(randomQuestion, answers[0]));
+    document.getElementById('answer-two').addEventListener('click', () => handleAnswer(randomQuestion, answers[1]));
+    document.getElementById('answer-three').addEventListener('click', () => handleAnswer(randomQuestion, answers[2]));
+    document.getElementById('answer-four').addEventListener('click', () => handleAnswer(randomQuestion, answers[3]));
 }
 
 startBtn.addEventListener('click', startGame);

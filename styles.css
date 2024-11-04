@@ -3,7 +3,7 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background: linear-gradient(230deg, rgb(101, 84, 0), rgb(251, 246, 177));
+    background: linear-gradient(230deg, rgb(111, 93, 0), rgb(252, 247, 165));
     height: 100vh;
     width: 100vw;
 }
@@ -21,6 +21,10 @@ h2 {
 h3 {
     font-size: 1.6rem;
     font-weight: bold;
+}
+
+#difficulty-dropdown {
+    background: linear-gradient(230deg, rgb(220, 183, 0), rgb(252, 244, 124));
 }
 
 #count, #category {
@@ -72,5 +76,9 @@ h3 {
 
 #start-btn {
     font-size: 1rem;
+    font-weight: bold;
+}
+
+.bold {
     font-weight: bold;
 }
