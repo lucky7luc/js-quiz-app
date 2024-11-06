@@ -38,7 +38,7 @@ const getRandomQuestion = () => {
     if (filteredQuestions.length > 0) {
         const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
         const randomQuestion = filteredQuestions[randomIndex];
-        // to remove the current question, so you it does not appear twice
+        // to remove the current question, so it does not appear twice
         quizData = quizData.filter(question => question !== randomQuestion);
         return randomQuestion;
     } else {
@@ -88,18 +88,23 @@ const handleAnswer = (randomQuestion, userAnswer) => {
         <button id="next-btn" class="btn">Next Question</button>
         `;
     }
-
+   const nextBtn = document.getElementById('next-btn');
+    
     if (questionCount >= 6 || winCount >= 3) {
+        nextBtn.style.display = 'none';
+        setTimeout(() => {
+            nextBtn.style.display = 'block';
         startingPoint.innerHTML = `
         <span id="count">${winCount} / ${questionCount}</span>
-        <h2>${winCount >= 3 ? 'You Win!' : 'You Lose!'}</h2>
+        <h2>${winCount >= 3 ? 'You Win!' : 'You Loose!'}</h2>
         <button id="reset-btn" class="btn">Reset the Game</button>
         `;
         document.getElementById('reset-btn').addEventListener('click', resetGame);
-        return;
+    }, 2000);
+    return;
     }
 
-    document.getElementById('next-btn').addEventListener('click', startGame);
+    nextBtn.addEventListener('click', startGame);
 };
 
 const startGame = async () => {
