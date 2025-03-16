@@ -9,7 +9,7 @@
 body {
     text-align: center;
     background: linear-gradient(230deg, rgb(111, 93, 0), rgb(252, 247, 165));
-    min-height: 100vh;
+    min-height: 150vh;
     margin: 0 auto;
 }
 
