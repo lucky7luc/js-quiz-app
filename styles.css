@@ -111,7 +111,7 @@ h3 {
 
     body {
         font-size: 0.8rem;
-        min-height: 150vh;
+        height: 100%;
     }
     #starting-point {
     width: 190px;
