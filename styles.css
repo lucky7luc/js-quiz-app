@@ -1,11 +1,10 @@
-/* *::after,
+*::after,
 *::before,
 *{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    height: 100vh;
-} */
+}
 body {
     text-align: center;
     background: linear-gradient(230deg, rgb(111, 93, 0), rgb(252, 247, 165));
