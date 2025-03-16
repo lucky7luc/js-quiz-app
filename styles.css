@@ -9,7 +9,7 @@
 body {
     text-align: center;
     background: linear-gradient(230deg, rgb(111, 93, 0), rgb(252, 247, 165));
-    min-height: 150vh;
+    height: 100vh;
     margin: 0 auto;
 }
 
@@ -111,6 +111,7 @@ h3 {
 
     body {
         font-size: 0.8rem;
+        min-height: 150vh;
     }
     #starting-point {
     width: 190px;
